@@ -9,7 +9,7 @@ from optparse import OptionParser
 
 def init_parser():
     """ function to init option parser """
-    usage = "usage: %prog -u user -s secret -n name [-l label] \
+    usage = "usage: %prog -u user -s secret -n name [-m message_type] [-l label] \
 [-t title] [-c callback] [TEXT]"
 
     parser = OptionParser(usage, version="%prog " + notifo.__version__)
@@ -25,6 +25,8 @@ def init_parser():
                       help="title of the notification")
     parser.add_option("-c", "--callback", action="store", dest="callback",
                       help="callback URL to call")
+    parser.add_option("-m", "--message_type", action="store", dest="message_type",
+                      help="type of message to send to the user")
 
     (options, args) = parser.parse_args()
     return (parser, options, args)
@@ -45,27 +47,30 @@ def main():
     if not options.name:
         parser.error("No recipient given.")
 
-    # If there is no message, we probably want to subscribe a user
+    if not options.message_type:
+        options.message_type = "notification"
+
     if len(args) < 1:
         result = notifo.subscribe_user(options.user, options.secret, options.name)
     else:
-        params = {}
-        params["to"] = options.name
+	params = {}
+	params["to"] = options.name
 	m = ''
 	for a in args:
 		m = "%s %s" %(m, a)
-        params["msg"] = m
-        if options.label:
-            params["label"] = options.label
-        if options.title:
-            params["title"] = options.title
-        if options.callback:
-            params["uri"] = options.callback
+	params["msg"] = m
 
-        # send notification
-        result = notifo.send_notification(options.user,
-                                          options.secret,
-                                          **params)
+        if options.message_type == "message":
+            result = notifo.send_message(options.user, options.secret, **params)
+        elif options.message_type == "notification":
+		if options.label:
+		    params["label"] = options.label
+		if options.title:
+		    params["title"] = options.title
+		if options.callback:
+		    params["uri"] = options.callback
+            result = notifo.send_notification(options.user,options.secret, **params)
+
 
     if result is None:
         print "Something went wrong. Check parameters and try again."

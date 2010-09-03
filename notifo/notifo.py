@@ -30,9 +30,25 @@ class Notifo:
         values["username"] = user
         return self._query(url, values)
 
+    def send_message(self, to=None, msg=None):
+        """ method to send a mesage to a user
+            
+            Parameters:
+                to -> recipient
+                msg -> message to send
+        """
+        url = self.root_url + "send_message"
+        values = {}
+        if to is not None:
+            values["to"] = to
+        if msg is not None:
+            values["msg"] = msg
+        return self._query(url, values)
+            
+
     def send_notification(self, to=None, msg=None, label=None,
                           title=None, uri=None):
-        """ method to send a message to a user
+        """ method to send a notification to a user
 
             Parameters:
                 to -> recipient

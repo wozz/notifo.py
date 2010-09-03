@@ -24,6 +24,7 @@ notifo.py can be imported into any python module::
     import notifo
 
     notifo.send_notification(login, token, recipient, msg, label, title, uri)
+    notifo.send_message(login, token, recipient, msg)
     notifo.subscribe_user(login, token, user)
 
 Return data is the parsed json status code::
@@ -32,6 +33,6 @@ Return data is the parsed json status code::
 
 There is also a cli client included::
 
-    notifo_cli.py -u user -s secret -n name [-l label] [-t title] [-c callback] [TEXT]
+    notifo_cli.py -u user -s secret -n name [-m message_type] [-l label] [-t title] [-c callback] [TEXT]
 
 .. _notifo.com: http://notifo.com

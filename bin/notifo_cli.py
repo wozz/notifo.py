@@ -53,22 +53,22 @@ def main():
     if len(args) < 1:
         result = notifo.subscribe_user(options.user, options.secret, options.name)
     else:
-	params = {}
-	params["to"] = options.name
-	m = ''
-	for a in args:
-		m = "%s %s" %(m, a)
-	params["msg"] = m
-
+        params = {}
+        params["to"] = options.name
+        m = ''
+        for a in args:
+            m = "%s %s" %(m, a)
+        params["msg"] = m
+        
         if options.message_type == "message":
             result = notifo.send_message(options.user, options.secret, **params)
         elif options.message_type == "notification":
-		if options.label:
-		    params["label"] = options.label
-		if options.title:
-		    params["title"] = options.title
-		if options.callback:
-		    params["uri"] = options.callback
+            if options.label:
+                params["label"] = options.label
+            if options.title:
+                params["title"] = options.title
+            if options.callback:
+                params["uri"] = options.callback
             result = notifo.send_notification(options.user,options.secret, **params)
 
 
